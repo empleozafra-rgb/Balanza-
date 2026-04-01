@@ -1,0 +1,51 @@
+<!DOCTYPE html><html>
+<head>
+  <title>CC Transporte Carbone</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <style>
+    body {
+      font-family: Arial;
+      background: #f4f4f4;
+      text-align: center;
+    }
+    .box {
+      background: white;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 10px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      width: 80%;
+    }
+    button {
+      background: green;
+      color: white;
+      border: none;
+    }
+  </style></head>
+<body>  <div class="box">
+    <h1>🚛 CC Servicio y Transporte Carbone</h1>
+    <p>Carga, descarga y logística de granos y fertilizantes</p>
+  </div>  <div class="box">
+    <h2>📋 Registrar camión</h2><input type="text" id="nombre" placeholder="Nombre chofer"><br>
+<input type="text" id="camion" placeholder="Matrícula"><br>
+<input type="number" id="peso" placeholder="Peso"><br>
+
+<button onclick="guardar()">Guardar</button>
+
+  </div>  <div class="box">
+    <h2>📲 Contacto</h2>
+    <a href="https://wa.me/091429535">
+      <button>WhatsApp</button>
+    </a>
+  </div><script>
+function guardar() {
+  const nombre = document.getElementById("nombre").value;
+  const camion = document.getElementById("camion").value;
+  const peso = document.getElementById("peso").value;
+
+  alert("Guardado (después lo conectamos a Excel)");
+}
+</script></body>
+</html>
