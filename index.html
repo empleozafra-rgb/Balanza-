@@ -1,4 +1,48 @@
+<script>
+function enviarWhatsApp() {
+    let chofer = document.getElementById("chofer").value;
+    let matricula = document.getElementById("matricula").value;
+    let producto = document.getElementById("producto").value;
+    let chacra = document.getElementById("chacra").value;
+    let productor = document.getElementById("productor").value;
+    let cliente = document.getElementById("cliente").value;
+    let destino = document.getElementById("destino").value;
+    let km = document.getElementById("km").value;
+    let bruto = document.getElementById("bruto").value;
+    let tara = document.getElementById("tara").value;
 
+    let neto = bruto - tara;
+
+    let mensaje = `📦 PESAJE
+
+Chofer: ${chofer}
+Matrícula: ${matricula}
+Producto: ${producto}
+Chacra: ${chacra}
+Productor: ${productor}
+Cliente: ${cliente}
+Destino: ${destino}
+Km: ${km}
+
+Bruto: ${bruto} kg
+Tara: ${tara} kg
+Neto: ${neto} kg`;
+
+    let tel1 = "598XXXXXXXX"; 
+    let tel2 = "598XXXXXXXX";
+
+    let url = `https://wa.me/${tel1}?text=${encodeURIComponent(mensaje)}`;
+
+    // 👉 abre uno seguro
+    window.open(url, "_blank");
+
+    // 👉 segundo con delay (CLAVE)
+    setTimeout(() => {
+        let url2 = `https://wa.me/${tel2}?text=${encodeURIComponent(mensaje)}`;
+        window.open(url2, "_blank");
+    }, 1500);
+}
+</script>
 <!DOCTYPE html>
 <html lang="es">
 <head>
