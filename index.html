@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Transporte Carbone</title>
+<title>LOGISTICA Y TRANSPORTE CARBONE</title>
 
 <style>
 body {
@@ -58,15 +58,19 @@ button {
 <div class="container">
 <h1>🚛 Transporte Carbone</h1>
 
-<input type="text" id="fecha" placeholder="Fecha">
-<input type="text" id="chofer" placeholder="Chofer">
-<input type="text" id="camion" placeholder="Camión">
-<input type="text" id="origen" placeholder="Origen">
-<input type="text" id="destino" placeholder="Destino">
-<input type="number" id="peso" placeholder="Peso (kg)">
-<input type="number" id="humedad" placeholder="Humedad (%)">
-<input type="text" id="producto" placeholder="Producto">
-<input type="text" id="observaciones" placeholder="Observaciones">
+<input type="text" id="FECHA" placeholder="Fecha">
+<input type="text" id="CLIENTE" placeholder="Cliente">
+<input type="text" id="LUGAR DE CARGA" placeholder="Lugar de carga">
+<input type="text" id="LUGAR DE DESCARGA" placeholder="Lugar de descarga">
+<input type="text" id="PRODUCTO" placeholder="Producto">
+<input type="number" id="Nº DE PESADA/REMITO" placeholder="Nº de pesada">
+<input type="number" id="BRUTO" placeholder="Bruto">
+<input type="number" id="TARA" placeholder="Tara">
+<input type="number" id="NETO" placeholder="Neto">
+<input type="text" id="MATRICULA" placeholder="Matricula">
+<input type="text" id="kILOMETROS" placeholder="Kilometros">
+<input type="text" id="CHOFER" placeholder="Chofer">
+<input type="text" id="VIATICO" placeholder="SI/NO">
 
 <button class="guardar" onclick="guardarExcel()">💾 Guardar en Excel</button>
 <button class="whatsapp" onclick="enviarWhatsApp()">📲 Enviar por WhatsApp</button>
@@ -92,7 +96,7 @@ function guardarExcel() {
     let d = obtenerDatos();
 
     let contenido = 
-`Fecha,Chofer,Camion,Origen,Destino,Peso,Humedad,Producto,Observaciones
+`Fecha,Cliente,Camion,Origen,Destino,Peso,Humedad,Producto,Observaciones
 ${d.fecha},${d.chofer},${d.camion},${d.origen},${d.destino},${d.peso},${d.humedad},${d.producto},${d.observaciones}`;
 
     let blob = new Blob([contenido], { type: "text/csv" });
@@ -109,14 +113,18 @@ function enviarWhatsApp() {
 
     let mensaje = `🚛 Transporte Carbone
 Fecha: ${d.fecha}
-Chofer: ${d.chofer}
-Camión: ${d.camion}
-Origen: ${d.origen}
-Destino: ${d.destino}
-Peso: ${d.peso} kg
-Humedad: ${d.humedad}%
+Cliente: ${d.cliente}
+Lugar de carga: ${d.lugardecarga}
+Lugar de descarga: ${d.lugardedescarga}
 Producto: ${d.producto}
-Obs: ${d.observaciones}`;
+Nº de pesada: ${d.Nºdepesada}
+Bruto: ${d.bruto}Kg
+Tara: ${d.Tara}Kg
+Neto: ${d.neto}kg
+Matiricula: ${d.matricula}
+kilometros: ${d.kilometros}
+Chofer: ${d.chofer}
+Viatico: ${d.viatico}
 
     let url1 = "https://wa.me/59891429535?text=" + encodeURIComponent(mensaje);
     let url2 = "https://wa.me/59891996783?text=" + encodeURIComponent(mensaje);
