@@ -81,14 +81,18 @@ button {
 function obtenerDatos() {
     return {
         fecha: document.getElementById("fecha").value,
-        chofer: document.getElementById("chofer").value,
-        camion: document.getElementById("camion").value,
-        origen: document.getElementById("origen").value,
-        destino: document.getElementById("destino").value,
-        peso: document.getElementById("peso").value,
-        humedad: document.getElementById("humedad").value,
+        cliente: document.getElementById("cliente").value,
+        lugar de carga: document.getElementById("lugar de carga").value,
+        lugar de descarga: document.getElementById("lugar de descarga").value,
         producto: document.getElementById("producto").value,
-        observaciones: document.getElementById("observaciones").value
+        Nº de pesada: document.getElementById("Nº de pesada").value,
+        bruto: document.getElementById("bruto").value,
+        tara: document.getElementById("tara").value,
+        neto: document.getElementById("neto").value
+        matricula: document.getElementById("matricula").value
+        km: document.getElementById("km").value
+        chfer: document.getElementById("chofer").value
+        viatico: document.getElementById("viatico").value
     };
 }
 
@@ -96,8 +100,8 @@ function guardarExcel() {
     let d = obtenerDatos();
 
     let contenido = 
-`Fecha,Cliente,Camion,Origen,Destino,Peso,Humedad,Producto,Observaciones
-${d.fecha},${d.chofer},${d.camion},${d.origen},${d.destino},${d.peso},${d.humedad},${d.producto},${d.observaciones}`;
+`Fecha,Cliente,Lugar de carga,Lugar de descarga,Producto,Nº de pesada,Bruto,Tara,Neto,Matricula,km,Chofer,Viatico
+${d.fecha},${d.cliente},${d.lugardecarga},${d.lugardedescarga},${d.producto},${d.Nºdepesada},${d.bruto},${d.tara},${d.neto},${d.matricula},${d.km},${d.chfer},${d.viatico}`;
 
     let blob = new Blob([contenido], { type: "text/csv" });
     let url = URL.createObjectURL(blob);
