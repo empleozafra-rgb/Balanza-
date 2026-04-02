@@ -22,7 +22,7 @@ h1 {
     margin: auto;
 }
 
-input, select {
+input {
     width: 100%;
     padding: 12px;
     margin: 8px 0;
@@ -58,58 +58,59 @@ button {
 <div class="container">
 <h1>🚛 Transporte Carbone</h1>
 
-<input type="text" id="FECHA" placeholder="Fecha">
-<input type="text" id="CLIENTE" placeholder="Cliente">
-<input type="text" id="LUGAR DE CARGA" placeholder="Lugar de carga">
-<input type="text" id="LUGAR DE DESCARGA" placeholder="Lugar de descarga">
-<input type="text" id="PRODUCTO" placeholder="Producto">
-<input type="number" id="Nº DE PESADA/REMITO" placeholder="Nº de pesada">
-<input type="number" id="BRUTO" placeholder="Bruto">
-<input type="number" id="TARA" placeholder="Tara">
-<input type="number" id="NETO" placeholder="Neto">
-<input type="text" id="MATRICULA" placeholder="Matricula">
-<input type="text" id="kILOMETROS" placeholder="Kilometros">
-<input type="text" id="CHOFER" placeholder="Chofer">
-<input type="text" id="VIATICO" placeholder="SI/NO">
+<input type="text" id="fecha" placeholder="Fecha">
+<input type="text" id="cliente" placeholder="Cliente">
+<input type="text" id="carga" placeholder="Lugar de carga">
+<input type="text" id="descarga" placeholder="Lugar de descarga">
+<input type="text" id="producto" placeholder="Producto">
+<input type="number" id="pesada" placeholder="Nº de pesada">
+<input type="number" id="bruto" placeholder="Bruto">
+<input type="number" id="tara" placeholder="Tara">
+<input type="number" id="neto" placeholder="Neto">
+<input type="text" id="matricula" placeholder="Matricula">
+<input type="text" id="km" placeholder="Kilometros">
+<input type="text" id="chofer" placeholder="Chofer">
+<input type="text" id="viatico" placeholder="Viatico (SI/NO)">
 
-<button class="guardar" onclick="guardarExcel()">💾 Guardar en Excel</button>
+<button class="guardar" onclick="guardarOnline()">☁️ Guardar en Excel Online</button>
 <button class="whatsapp" onclick="enviarWhatsApp()">📲 Enviar por WhatsApp</button>
 
 </div>
 
 <script>
+const URL = "https://script.google.com/macros/s/AKfycbxK35dMdHzJ7ilJz5Ix9QjJl51fGXUnUdy7G9winVvGkcxoi04kok-LaYXYZvizZfwu/exec";
+
 function obtenerDatos() {
     return {
         fecha: document.getElementById("fecha").value,
         cliente: document.getElementById("cliente").value,
-        lugar de carga: document.getElementById("lugar de carga").value,
-        lugar de descarga: document.getElementById("lugar de descarga").value,
+        carga: document.getElementById("carga").value,
+        descarga: document.getElementById("descarga").value,
         producto: document.getElementById("producto").value,
-        Nº de pesada: document.getElementById("Nº de pesada").value,
+        pesada: document.getElementById("pesada").value,
         bruto: document.getElementById("bruto").value,
         tara: document.getElementById("tara").value,
-        neto: document.getElementById("neto").value
-        matricula: document.getElementById("matricula").value
-        km: document.getElementById("km").value
-        chfer: document.getElementById("chofer").value
+        neto: document.getElementById("neto").value,
+        matricula: document.getElementById("matricula").value,
+        km: document.getElementById("km").value,
+        chofer: document.getElementById("chofer").value,
         viatico: document.getElementById("viatico").value
     };
 }
 
-function guardarExcel() {
-    let d = obtenerDatos();
+function guardarOnline() {
+    let datos = obtenerDatos();
 
-    let contenido = 
-`Fecha,Cliente,Lugar de carga,Lugar de descarga,Producto,Nº de pesada,Bruto,Tara,Neto,Matricula,km,Chofer,Viatico
-${d.fecha},${d.cliente},${d.lugardecarga},${d.lugardedescarga},${d.producto},${d.Nºdepesada},${d.bruto},${d.tara},${d.neto},${d.matricula},${d.km},${d.chfer},${d.viatico}`;
-
-    let blob = new Blob([contenido], { type: "text/csv" });
-    let url = URL.createObjectURL(blob);
-
-    let a = document.createElement("a");
-    a.href = url;
-    a.download = "registro.csv";
-    a.click();
+    fetch(URL, {
+        method: "POST",
+        body: JSON.stringify(datos)
+    })
+    .then(() => {
+        alert("✅ Guardado en Excel online");
+    })
+    .catch(() => {
+        alert("❌ Error al guardar");
+    });
 }
 
 function enviarWhatsApp() {
@@ -118,17 +119,17 @@ function enviarWhatsApp() {
     let mensaje = `🚛 Transporte Carbone
 Fecha: ${d.fecha}
 Cliente: ${d.cliente}
-Lugar de carga: ${d.lugardecarga}
-Lugar de descarga: ${d.lugardedescarga}
+Carga: ${d.carga}
+Descarga: ${d.descarga}
 Producto: ${d.producto}
-Nº de pesada: ${d.Nºdepesada}
-Bruto: ${d.bruto}Kg
-Tara: ${d.Tara}Kg
-Neto: ${d.neto}kg
-Matiricula: ${d.matricula}
-kilometros: ${d.kilometros}
+Pesada: ${d.pesada}
+Bruto: ${d.bruto} Kg
+Tara: ${d.tara} Kg
+Neto: ${d.neto} Kg
+Matricula: ${d.matricula}
+Kilometros: ${d.km}
 Chofer: ${d.chofer}
-Viatico: ${d.viatico}
+Viatico: ${d.viatico}`;
 
     let url1 = "https://wa.me/59891429535?text=" + encodeURIComponent(mensaje);
     let url2 = "https://wa.me/59891996783?text=" + encodeURIComponent(mensaje);
