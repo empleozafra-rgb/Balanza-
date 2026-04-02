@@ -1,201 +1,129 @@
-<script>
-function enviarWhatsApp() {
-    let chofer = document.getElementById("chofer").value;
-    let matricula = document.getElementById("matricula").value;
-    let producto = document.getElementById("producto").value;
-    let chacra = document.getElementById("chacra").value;
-    let productor = document.getElementById("productor").value;
-    let cliente = document.getElementById("cliente").value;
-    let destino = document.getElementById("destino").value;
-    let km = document.getElementById("km").value;
-    let bruto = document.getElementById("bruto").value;
-    let tara = document.getElementById("tara").value;
-
-    let neto = bruto - tara;
-
-    let mensaje = `📦 PESAJE
-
-Chofer: ${chofer}
-Matrícula: ${matricula}
-Producto: ${producto}
-Chacra: ${chacra}
-Productor: ${productor}
-Cliente: ${cliente}
-Destino: ${destino}
-Km: ${km}
-
-Bruto: ${bruto} kg
-Tara: ${tara} kg
-Neto: ${neto} kg`;
-
-    let tel1 = "598XXXXXXXX"; 
-    let tel2 = "598XXXXXXXX";
-
-    let url = `https://wa.me/${tel1}?text=${encodeURIComponent(mensaje)}`;
-
-    // 👉 abre uno seguro
-    window.open(url, "_blank");
-
-    // 👉 segundo con delay (CLAVE)
-    setTimeout(() => {
-        let url2 = `https://wa.me/${tel2}?text=${encodeURIComponent(mensaje)}`;
-        window.open(url2, "_blank");
-    }, 1500);
-}
-</script>
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Sistema de Pesaje</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transporte Carbone</title>
+
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #1e1e1e;
-        color: white;
-        text-align: center;
-    }
-    .container {
-        margin-top: 50px;
-    }
-    input {
-        width: 300px;
-        padding: 10px;
-        margin: 8px;
-        font-size: 18px;
-    }
-    button {
-        padding: 15px 30px;
-        font-size: 20px;
-        background: yellow;
-        border: none;
-        cursor: pointer;
-    }
-    .hidden {
-        display: none;
-    }
+body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+    padding: 15px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.guardar {
+    background: #22c55e;
+    color: white;
+}
+
+.whatsapp {
+    background: #25D366;
+    color: white;
+}
 </style>
 </head>
 
 <body>
 
 <div class="container">
+<h1>🚛 Transporte Carbone</h1>
 
-    <h1>⚖️ Sistema de Pesaje</h1>
+<input type="text" id="fecha" placeholder="Fecha">
+<input type="text" id="chofer" placeholder="Chofer">
+<input type="text" id="camion" placeholder="Camión">
+<input type="text" id="origen" placeholder="Origen">
+<input type="text" id="destino" placeholder="Destino">
+<input type="number" id="peso" placeholder="Peso (kg)">
+<input type="number" id="humedad" placeholder="Humedad (%)">
+<input type="text" id="producto" placeholder="Producto">
+<input type="text" id="observaciones" placeholder="Observaciones">
 
-    <!-- INICIO -->
-    <div id="inicio">
-        <button onclick="mostrarFormulario()">PESAR CAMIÓN</button>
-    </div>
-
-    <!-- FORMULARIO -->
-    <div id="formulario" class="hidden">
-        <h2>Datos del Camión</h2>
-
-        <input type="text" id="chofer" placeholder="Chofer"><br>
-        <input type="text" id="matricula" placeholder="Matrícula"><br>
-        <input type="text" id="producto" placeholder="Producto"><br>
-        <input type="text" id="chacra" placeholder="Chacra / Planta"><br>
-        <input type="text" id="productor" placeholder="Productor"><br>
-        <input type="text" id="cliente" placeholder="Cliente"><br>
-        <input type="text" id="destino" placeholder="Destino"><br>
-        <input type="number" id="km" placeholder="Km"><br>
-        <input type="number" id="pesoBruto" placeholder="Peso Bruto (kg)"><br>
-
-        <button onclick="guardarDatos()">SIGUIENTE</button>
-    </div>
-
-    <!-- SEGUNDA PESADA -->
-    <div id="segundaPesada" class="hidden">
-        <h2>Peso en Vacío (Tara)</h2>
-
-        <input type="number" id="pesoTara" placeholder="Peso Tara (kg)"><br>
-
-        <button onclick="calcular()">FINALIZAR</button>
-    </div>
-
-    <!-- RESULTADO -->
-    <div id="resultado" class="hidden">
-        <h2>Resultado Final</h2>
-        <p id="resumen"></p>
-    </div>
+<button class="guardar" onclick="guardarExcel()">💾 Guardar en Excel</button>
+<button class="whatsapp" onclick="enviarWhatsApp()">📲 Enviar por WhatsApp</button>
 
 </div>
 
 <script>
-
-let datos = {};
-
-function mostrarFormulario() {
-    document.getElementById("inicio").classList.add("hidden");
-    document.getElementById("formulario").classList.remove("hidden");
+function obtenerDatos() {
+    return {
+        fecha: document.getElementById("fecha").value,
+        chofer: document.getElementById("chofer").value,
+        camion: document.getElementById("camion").value,
+        origen: document.getElementById("origen").value,
+        destino: document.getElementById("destino").value,
+        peso: document.getElementById("peso").value,
+        humedad: document.getElementById("humedad").value,
+        producto: document.getElementById("producto").value,
+        observaciones: document.getElementById("observaciones").value
+    };
 }
 
-function guardarDatos() {
-    datos.chofer = document.getElementById("chofer").value;
-    datos.matricula = document.getElementById("matricula").value;
-    datos.producto = document.getElementById("producto").value;
-    datos.chacra = document.getElementById("chacra").value;
-    datos.productor = document.getElementById("productor").value;
-    datos.cliente = document.getElementById("cliente").value;
-    datos.destino = document.getElementById("destino").value;
-    datos.km = document.getElementById("km").value;
-    datos.bruto = parseFloat(document.getElementById("pesoBruto").value);
+function guardarExcel() {
+    let d = obtenerDatos();
 
-    document.getElementById("formulario").classList.add("hidden");
-    document.getElementById("segundaPesada").classList.remove("hidden");
+    let contenido = 
+`Fecha,Chofer,Camion,Origen,Destino,Peso,Humedad,Producto,Observaciones
+${d.fecha},${d.chofer},${d.camion},${d.origen},${d.destino},${d.peso},${d.humedad},${d.producto},${d.observaciones}`;
+
+    let blob = new Blob([contenido], { type: "text/csv" });
+    let url = URL.createObjectURL(blob);
+
+    let a = document.createElement("a");
+    a.href = url;
+    a.download = "registro.csv";
+    a.click();
 }
 
-function calcular() {
-    datos.tara = parseFloat(document.getElementById("pesoTara").value);
-    let neto = datos.bruto - datos.tara;
+function enviarWhatsApp() {
+    let d = obtenerDatos();
 
-    document.getElementById("segundaPesada").classList.add("hidden");
-    document.getElementById("resultado").classList.remove("hidden");
+    let mensaje = `🚛 Transporte Carbone
+Fecha: ${d.fecha}
+Chofer: ${d.chofer}
+Camión: ${d.camion}
+Origen: ${d.origen}
+Destino: ${d.destino}
+Peso: ${d.peso} kg
+Humedad: ${d.humedad}%
+Producto: ${d.producto}
+Obs: ${d.observaciones}`;
 
-    document.getElementById("resumen").innerHTML = `
-        Chofer: ${datos.chofer} <br>
-        Matrícula: ${datos.matricula} <br>
-        Producto: ${datos.producto} <br>
-        Chacra/Planta: ${datos.chacra} <br>
-        Productor: ${datos.productor} <br>
-        Cliente: ${datos.cliente} <br>
-        Destino: ${datos.destino} <br>
-        Km: ${datos.km} <br><br>
-
-        Peso Bruto: ${datos.bruto} kg <br>
-        Peso Tara: ${datos.tara} kg <br>
-        <b>Peso Neto: ${neto} kg</b>
-    `;
-
-    // 👉 MENSAJE WHATSAPP
-    let mensaje = `
-📦 PESAJE FINAL
-
-Chofer: ${datos.chofer}
-Matrícula: ${datos.matricula}
-Producto: ${datos.producto}
-Chacra: ${datos.chacra}
-Productor: ${datos.productor}
-Cliente: ${datos.cliente}
-Destino: ${datos.destino}
-Km: ${datos.km}
-
-Bruto: ${datos.bruto} kg
-Tara: ${datos.tara} kg
-Neto: ${neto} kg
-`;
-
-    let tel1 = "598091429535";
-    let tel2 = "598091996783";
-
-    let url1 = `https://wa.me/${tel1}?text=${encodeURIComponent(mensaje)}`;
-    let url2 = `https://wa.me/${tel2}?text=${encodeURIComponent(mensaje)}`;
+    let url1 = "https://wa.me/59891429535?text=" + encodeURIComponent(mensaje);
+    let url2 = "https://wa.me/59891996783?text=" + encodeURIComponent(mensaje);
 
     window.open(url1, "_blank");
     window.open(url2, "_blank");
 }
-
 </script>
 
 </body>
