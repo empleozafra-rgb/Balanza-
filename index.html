@@ -1,51 +1,158 @@
-<!DOCTYPE html><html>
+
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <title>CC Transporte Carbone</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <style>
+<meta charset="UTF-8">
+<title>Sistema de Pesaje</title>
+<style>
     body {
-      font-family: Arial;
-      background: #f4f4f4;
-      text-align: center;
+        font-family: Arial, sans-serif;
+        background: #1e1e1e;
+        color: white;
+        text-align: center;
     }
-    .box {
-      background: white;
-      padding: 20px;
-      margin: 20px;
-      border-radius: 10px;
+    .container {
+        margin-top: 50px;
     }
-    input, button {
-      padding: 10px;
-      margin: 5px;
-      width: 80%;
+    input {
+        width: 300px;
+        padding: 10px;
+        margin: 8px;
+        font-size: 18px;
     }
     button {
-      background: green;
-      color: white;
-      border: none;
+        padding: 15px 30px;
+        font-size: 20px;
+        background: yellow;
+        border: none;
+        cursor: pointer;
     }
-  </style></head>
-<body>  <div class="box">
-    <h1>🚛 CC Servicio y Transporte Carbone</h1>
-    <p>Carga, descarga y logística de granos y fertilizantes</p>
-  </div>  <div class="box">
-    <h2>📋 Registrar camión</h2><input type="text" id="nombre" placeholder="Nombre chofer"><br>
-<input type="text" id="camion" placeholder="Matrícula"><br>
-<input type="number" id="peso" placeholder="Peso"><br>
+    .hidden {
+        display: none;
+    }
+</style>
+</head>
 
-<button onclick="guardar()">Guardar</button>
+<body>
 
-  </div>  <div class="box">
-    <h2>📲 Contacto</h2>
-    <a href="https://wa.me/091429535">
-      <button>WhatsApp</button>
-    </a>
-  </div><script>
-function guardar() {
-  const nombre = document.getElementById("nombre").value;
-  const camion = document.getElementById("camion").value;
-  const peso = document.getElementById("peso").value;
+<div class="container">
 
-  alert("Guardado (después lo conectamos a Excel)");
+    <h1>⚖️ Sistema de Pesaje</h1>
+
+    <!-- INICIO -->
+    <div id="inicio">
+        <button onclick="mostrarFormulario()">PESAR CAMIÓN</button>
+    </div>
+
+    <!-- FORMULARIO -->
+    <div id="formulario" class="hidden">
+        <h2>Datos del Camión</h2>
+
+        <input type="text" id="chofer" placeholder="Chofer"><br>
+        <input type="text" id="matricula" placeholder="Matrícula"><br>
+        <input type="text" id="producto" placeholder="Producto"><br>
+        <input type="text" id="chacra" placeholder="Chacra / Planta"><br>
+        <input type="text" id="productor" placeholder="Productor"><br>
+        <input type="text" id="cliente" placeholder="Cliente"><br>
+        <input type="text" id="destino" placeholder="Destino"><br>
+        <input type="number" id="km" placeholder="Km"><br>
+        <input type="number" id="pesoBruto" placeholder="Peso Bruto (kg)"><br>
+
+        <button onclick="guardarDatos()">SIGUIENTE</button>
+    </div>
+
+    <!-- SEGUNDA PESADA -->
+    <div id="segundaPesada" class="hidden">
+        <h2>Peso en Vacío (Tara)</h2>
+
+        <input type="number" id="pesoTara" placeholder="Peso Tara (kg)"><br>
+
+        <button onclick="calcular()">FINALIZAR</button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="resultado" class="hidden">
+        <h2>Resultado Final</h2>
+        <p id="resumen"></p>
+    </div>
+
+</div>
+
+<script>
+
+let datos = {};
+
+function mostrarFormulario() {
+    document.getElementById("inicio").classList.add("hidden");
+    document.getElementById("formulario").classList.remove("hidden");
 }
-</script></body>
+
+function guardarDatos() {
+    datos.chofer = document.getElementById("chofer").value;
+    datos.matricula = document.getElementById("matricula").value;
+    datos.producto = document.getElementById("producto").value;
+    datos.chacra = document.getElementById("chacra").value;
+    datos.productor = document.getElementById("productor").value;
+    datos.cliente = document.getElementById("cliente").value;
+    datos.destino = document.getElementById("destino").value;
+    datos.km = document.getElementById("km").value;
+    datos.bruto = parseFloat(document.getElementById("pesoBruto").value);
+
+    document.getElementById("formulario").classList.add("hidden");
+    document.getElementById("segundaPesada").classList.remove("hidden");
+}
+
+function calcular() {
+    datos.tara = parseFloat(document.getElementById("pesoTara").value);
+    let neto = datos.bruto - datos.tara;
+
+    document.getElementById("segundaPesada").classList.add("hidden");
+    document.getElementById("resultado").classList.remove("hidden");
+
+    document.getElementById("resumen").innerHTML = `
+        Chofer: ${datos.chofer} <br>
+        Matrícula: ${datos.matricula} <br>
+        Producto: ${datos.producto} <br>
+        Chacra/Planta: ${datos.chacra} <br>
+        Productor: ${datos.productor} <br>
+        Cliente: ${datos.cliente} <br>
+        Destino: ${datos.destino} <br>
+        Km: ${datos.km} <br><br>
+
+        Peso Bruto: ${datos.bruto} kg <br>
+        Peso Tara: ${datos.tara} kg <br>
+        <b>Peso Neto: ${neto} kg</b>
+    `;
+
+    // 👉 MENSAJE WHATSAPP
+    let mensaje = `
+📦 PESAJE FINAL
+
+Chofer: ${datos.chofer}
+Matrícula: ${datos.matricula}
+Producto: ${datos.producto}
+Chacra: ${datos.chacra}
+Productor: ${datos.productor}
+Cliente: ${datos.cliente}
+Destino: ${datos.destino}
+Km: ${datos.km}
+
+Bruto: ${datos.bruto} kg
+Tara: ${datos.tara} kg
+Neto: ${neto} kg
+`;
+
+    let tel1 = "598091429535";
+    let tel2 = "598091996783";
+
+    let url1 = `https://wa.me/${tel1}?text=${encodeURIComponent(mensaje)}`;
+    let url2 = `https://wa.me/${tel2}?text=${encodeURIComponent(mensaje)}`;
+
+    window.open(url1, "_blank");
+    window.open(url2, "_blank");
+}
+
+</script>
+
+</body>
 </html>
