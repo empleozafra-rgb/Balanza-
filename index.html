@@ -63,10 +63,14 @@ button {
 <input type="text" id="carga" placeholder="Lugar de carga">
 <input type="text" id="descarga" placeholder="Lugar de descarga">
 <input type="text" id="producto" placeholder="Producto">
-<input type="number" id="pesada" placeholder="Nº de pesada">
+
+<!-- CAMBIO: ahora es text -->
+<input type="text" id="pesada" placeholder="Nº de pesada">
+
 <input type="number" id="bruto" placeholder="Bruto">
 <input type="number" id="tara" placeholder="Tara">
 <input type="number" id="neto" placeholder="Neto">
+
 <input type="text" id="matricula" placeholder="Matricula">
 <input type="text" id="km" placeholder="Kilometros">
 <input type="text" id="chofer" placeholder="Chofer">
@@ -98,6 +102,11 @@ function obtenerDatos() {
     };
 }
 
+// 🔥 NUEVO: limpia todos los campos
+function limpiarCampos() {
+    document.querySelectorAll("input").forEach(input => input.value = "");
+}
+
 function guardarOnline() {
     let datos = obtenerDatos();
 
@@ -107,6 +116,7 @@ function guardarOnline() {
     })
     .then(() => {
         alert("✅ Guardado en Excel online");
+        limpiarCampos(); // 🔥 limpia después de guardar
     })
     .catch(() => {
         alert("❌ Error al guardar");
@@ -136,6 +146,8 @@ Viatico: ${d.viatico}`;
 
     window.open(url1, "_blank");
     window.open(url2, "_blank");
+
+    limpiarCampos(); // 🔥 limpia después de enviar
 }
 </script>
 
