@@ -3,54 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema de Pesaje</title>
+<title>LOGISTICA Y TRANSPORTE CARBONE</title>
 
 <style>
 body {
-    font-family: Arial;
-    background: #f4f4f4;
-    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+    padding: 15px;
 }
 
-.container {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    max-width: 500px;
-    margin: auto;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-}
-
-h2 {
+h1 {
     text-align: center;
 }
 
-input, button {
+.container {
+    max-width: 500px;
+    margin: auto;
+}
+
+input {
     width: 100%;
     padding: 12px;
-    margin-top: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
     font-size: 16px;
 }
 
 button {
-    background: #28a745;
-    color: white;
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
     border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #218838;
-}
-
-#mensaje {
-    display: none;
-    text-align: center;
-    margin-top: 20px;
+    border-radius: 10px;
+    font-size: 16px;
     font-weight: bold;
-    color: green;
-    font-size: 18px;
+}
+
+.guardar {
+    background: #22c55e;
+    color: white;
+}
+
+.whatsapp {
+    background: #25D366;
+    color: white;
 }
 </style>
 </head>
@@ -58,63 +56,99 @@ button:hover {
 <body>
 
 <div class="container">
+<h1>🚛 Transporte Carbone</h1>
 
-<h2>🚛 Sistema de Pesaje</h2>
+<input type="text" id="fecha" placeholder="Fecha">
+<input type="text" id="cliente" placeholder="Cliente">
+<input type="text" id="carga" placeholder="Lugar de carga">
+<input type="text" id="descarga" placeholder="Lugar de descarga">
+<input type="text" id="producto" placeholder="Producto">
 
-<input type="text" id="numero" placeholder="N° de pesada">
-<input type="text" id="matricula" placeholder="Matrícula">
-<input type="number" id="peso" placeholder="Peso">
+<!-- CAMBIO: ahora es text -->
+<input type="text" id="pesada" placeholder="Nº de pesada">
 
-<button onclick="guardar()">Guardar</button>
+<input type="number" id="bruto" placeholder="Bruto">
+<input type="number" id="tara" placeholder="Tara">
+<input type="number" id="neto" placeholder="Neto">
 
-<div id="mensaje">✅ Guardado correctamente en Excel</div>
+<input type="text" id="matricula" placeholder="Matricula">
+<input type="text" id="km" placeholder="Kilometros">
+<input type="text" id="chofer" placeholder="Chofer">
+<input type="text" id="viatico" placeholder="Viatico (SI/NO)">
+
+<button class="guardar" onclick="guardarOnline()">☁️ Guardar en Excel Online</button>
+<button class="whatsapp" onclick="enviarWhatsApp()">📲 Enviar por WhatsApp</button>
 
 </div>
 
 <script>
+const URL = "https://script.google.com/macros/s/AKfycbxK35dMdHzJ7ilJz5Ix9QjJl51fGXUnUdy7G9winVvGkcxoi04kok-LaYXYZvizZfwu/exec";
 
-const sonido = new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3");
-
-// 👉 Convertir matrícula a MAYÚSCULAS mientras escribe
-document.getElementById("matricula").addEventListener("input", function() {
-    this.value = this.value.toUpperCase();
-});
-
-function guardar() {
-
-    let numero = document.getElementById("numero").value;
-    let matricula = document.getElementById("matricula").value;
-    let peso = document.getElementById("peso").value;
-
-    if (!numero || !matricula || !peso) {
-        alert("Completá todos los campos");
-        return;
-    }
-
-    // 👉 ACÁ va tu envío a Excel / Google Sheets
-    console.log("Guardado:", numero, matricula, peso);
-
-    // 👉 Mostrar mensaje
-    let msg = document.getElementById("mensaje");
-    msg.style.display = "block";
-
-    // 👉 Sonido
-    sonido.play();
-
-    // 👉 Limpiar campos
-    document.getElementById("numero").value = "";
-    document.getElementById("matricula").value = "";
-    document.getElementById("peso").value = "";
-
-    // 👉 Volver foco al inicio
-    document.getElementById("numero").focus();
-
-    // 👉 Ocultar mensaje automático
-    setTimeout(() => {
-        msg.style.display = "none";
-    }, 2000);
+function obtenerDatos() {
+    return {
+        fecha: document.getElementById("fecha").value,
+        cliente: document.getElementById("cliente").value,
+        carga: document.getElementById("carga").value,
+        descarga: document.getElementById("descarga").value,
+        producto: document.getElementById("producto").value,
+        pesada: document.getElementById("pesada").value,
+        bruto: document.getElementById("bruto").value,
+        tara: document.getElementById("tara").value,
+        neto: document.getElementById("neto").value,
+        matricula: document.getElementById("matricula").value,
+        km: document.getElementById("km").value,
+        chofer: document.getElementById("chofer").value,
+        viatico: document.getElementById("viatico").value
+    };
 }
 
+// 🔥 NUEVO: limpia todos los campos
+function limpiarCampos() {
+    document.querySelectorAll("input").forEach(input => input.value = "");
+}
+
+function guardarOnline() {
+    let datos = obtenerDatos();
+
+    fetch(URL, {
+        method: "POST",
+        body: JSON.stringify(datos)
+    })
+    .then(() => {
+        alert("✅ Guardado en Excel online");
+        limpiarCampos(); // 🔥 limpia después de guardar
+    })
+    .catch(() => {
+        alert("❌ Error al guardar");
+    });
+}
+
+function enviarWhatsApp() {
+    let d = obtenerDatos();
+
+    let mensaje = `🚛 Transporte Carbone
+Fecha: ${d.fecha}
+Cliente: ${d.cliente}
+Carga: ${d.carga}
+Descarga: ${d.descarga}
+Producto: ${d.producto}
+Pesada: ${d.pesada}
+Bruto: ${d.bruto} Kg
+Tara: ${d.tara} Kg
+Neto: ${d.neto} Kg
+Matricula: ${d.matricula}
+Kilometros: ${d.km}
+Chofer: ${d.chofer}
+Viatico: ${d.viatico}`;
+
+    let url1 = "https://wa.me/59891429535?text=" + encodeURIComponent(mensaje);
+    let url2 = "https://wa.me/59891996783?text=" + encodeURIComponent(mensaje);
+
+    window.open(url1, "_blank");
+    window.open(url2, "_blank");
+
+    limpiarCampos(); // 🔥 limpia después de enviar
+}
 </script>
 
 </body>
