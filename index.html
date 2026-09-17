@@ -10,7 +10,7 @@ body {
     font-family: Arial, sans-serif;
     background: #0f172a;
     color: white;
-    padding: 15px;
+    padding: 15 px;
 }
 
 h1 {
@@ -18,26 +18,26 @@ h1 {
 }
 
 .container {
-    max-width: 500px;
+    max-width: 500 px;
     margin: auto;
 }
 
 input {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 8px;
+    width: 100 %;
+    padding: 12 px;
+    margin: 8 px 0;
+    border-radius: 8 px;
     border: none;
-    font-size: 16px;
+    font-size: 16 px;
 }
 
 button {
-    width: 100%;
-    padding: 15px;
-    margin-top: 10px;
+    width: 100 %;
+    padding: 15 px;
+    margin-top: 10 px;
     border: none;
-    border-radius: 10px;
-    font-size: 16px;
+    border-radius: 10 px;
+    font-size: 16 px;
     font-weight: bold;
 }
 
@@ -82,10 +82,10 @@ button {
 </div>
 
 <script>
-const URL = https://docs.google.com/spreadsheets/d/1pA8ixlWflmvxPCt6aV6VKvWcJRCr7sEG-Zg_8w2P7vk/edit?usp=drivesdk
+Const URL = https://docs.google.com/spreadsheets/d/1pA8ixlWflmvxPCt6aV6VKvWcJRCr7sEG-Zg_8w2P7vk/edit?usp=drivesdk
 
-function obtenerDatos() {
-    return {
+Function obtenerDatos() {
+    Return {
         fecha: document.getElementById("fecha").value,
         cliente: document.getElementById("cliente").value,
         carga: document.getElementById("carga").value,
@@ -103,12 +103,12 @@ function obtenerDatos() {
 }
 
 // 🔥 NUEVO: limpia todos los campos
-function limpiarCampos() {
+Function limpiarCampos() {
     document.querySelectorAll("input").forEach(input => input.value = "");
 }
 
-function guardarOnline() {
-    let datos = obtenerDatos();
+Function guardarOnline() {
+    Let datos = obtenerDatos();
 
     fetch(URL, {
         method: "POST",
@@ -123,10 +123,10 @@ function guardarOnline() {
     });
 }
 
-function enviarWhatsApp() {
-    let d = obtenerDatos();
+Function enviarWhatsApp() {
+    Let d = obtenerDatos();
 
-    let mensaje = `🚛 Transporte Carbone
+    Let mensaje = `🚛 Transporte Carbone
 Fecha: ${d.fecha}
 Cliente: ${d.cliente}
 Carga: ${d.carga}
@@ -141,8 +141,8 @@ Kilometros: ${d.km}
 Chofer: ${d.chofer}
 Viatico: ${d.viatico}`;
 
-    let url1 = "https://wa.me/59891429535?text=" + encodeURIComponent(mensaje);
-    let url2 = "https://wa.me/59891996783?text=" + encodeURIComponent(mensaje);
+    Let url1 = "https://wa.me/59891429535?text=" + encodeURIComponent(mensaje);
+    Let url2 = "https://wa.me/59891996783?text=" + encodeURIComponent(mensaje);
 
     window.open(url1, "_blank");
     window.open(url2, "_blank");
