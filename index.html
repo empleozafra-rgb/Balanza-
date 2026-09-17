@@ -1,155 +1,34 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LOGISTICA Y TRANSPORTE CARBONE</title>
-
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background: #0f172a;
-    color: white;
-    padding: 15 px;
-}
-
-h1 {
-    text-align: center;
-}
-
-.container {
-    max-width: 500 px;
-    margin: auto;
-}
-
-input {
-    width: 100 %;
-    padding: 12 px;
-    margin: 8 px 0;
-    border-radius: 8 px;
-    border: none;
-    font-size: 16 px;
-}
-
-button {
-    width: 100 %;
-    padding: 15 px;
-    margin-top: 10 px;
-    border: none;
-    border-radius: 10 px;
-    font-size: 16 px;
-    font-weight: bold;
-}
-
-.guardar {
-    background: #22c55e;
-    color: white;
-}
-
-.whatsapp {
-    background: #25D366;
-    color: white;
-}
-</style>
-</head>
-
-<body>
-
-<div class="container">
-<h1>🚛 Transporte Carbone</h1>
-
-<input type="text" id="fecha" placeholder="Fecha">
-<input type="text" id="cliente" placeholder="Cliente">
-<input type="text" id="carga" placeholder="Lugar de carga">
-<input type="text" id="descarga" placeholder="Lugar de descarga">
-<input type="text" id="producto" placeholder="Producto">
-
-<!-- CAMBIO: ahora es text -->
-<input type="text" id="pesada" placeholder="Nº de pesada">
-
-<input type="number" id="bruto" placeholder="Bruto">
-<input type="number" id="tara" placeholder="Tara">
-<input type="number" id="neto" placeholder="Neto">
-
-<input type="text" id="matricula" placeholder="Matricula">
-<input type="text" id="km" placeholder="Kilometros">
-<input type="text" id="chofer" placeholder="Chofer">
-<input type="text" id="viatico" placeholder="Viatico (SI/NO)">
-
-<button class="guardar" onclick="guardarOnline()">☁️ Guardar en Excel Online</button>
-<button class="whatsapp" onclick="enviarWhatsApp()">📲 Enviar por WhatsApp</button>
-
-</div>
-
-<script>
-Const URL = https://docs.google.com/spreadsheets/d/1pA8ixlWflmvxPCt6aV6VKvWcJRCr7sEG-Zg_8w2P7vk/edit?usp=drivesdk
-
-Function obtenerDatos() {
-    Return {
-        fecha: document.getElementById("fecha").value,
-        cliente: document.getElementById("cliente").value,
-        carga: document.getElementById("carga").value,
-        descarga: document.getElementById("descarga").value,
-        producto: document.getElementById("producto").value,
-        pesada: document.getElementById("pesada").value,
-        bruto: document.getElementById("bruto").value,
-        tara: document.getElementById("tara").value,
-        neto: document.getElementById("neto").value,
-        matricula: document.getElementById("matricula").value,
-        km: document.getElementById("km").value,
-        chofer: document.getElementById("chofer").value,
-        viatico: document.getElementById("viatico").value
-    };
-}
-
-// 🔥 NUEVO: limpia todos los campos
-Function limpiarCampos() {
-    document.querySelectorAll("input").forEach(input => input.value = "");
-}
-
-Function guardarOnline() {
-    Let datos = obtenerDatos();
-
-    fetch(URL, {
-        method: "POST",
-        body: JSON.stringify(datos)
-    })
-    .then(() => {
-        alert("✅ Guardado en Excel online");
-        limpiarCampos(); // 🔥 limpia después de guardar
-    })
-    .catch(() => {
-        alert("❌ Error al guardar");
-    });
-}
-
-Function enviarWhatsApp() {
-    Let d = obtenerDatos();
-
-    Let mensaje = `🚛 Transporte Carbone
-Fecha: ${d.fecha}
-Cliente: ${d.cliente}
-Carga: ${d.carga}
-Descarga: ${d.descarga}
-Producto: ${d.producto}
-Pesada: ${d.pesada}
-Bruto: ${d.bruto} Kg
-Tara: ${d.tara} Kg
-Neto: ${d.neto} Kg
-Matricula: ${d.matricula}
-Kilometros: ${d.km}
-Chofer: ${d.chofer}
-Viatico: ${d.viatico}`;
-
-    Let url1 = "https://wa.me/59891429535?text=" + encodeURIComponent(mensaje);
-    Let url2 = "https://wa.me/59891996783?text=" + encodeURIComponent(mensaje);
-
-    window.open(url1, "_blank");
-    window.open(url2, "_blank");
-
-    limpiarCampos(); // 🔥 limpia después de enviar
-}
-</script>
-
-</body>
-</html>
+const ID_HOJA = "1pA8ixlWflmvxPCt6aV6VKvWcJRCr7sEG-Zg_8w2P7vk";
+ const NOMBRE_HOJA = "Hoja 1";
+ function doPost(e) {
+   try {
+     const datos = JSON.parse(e.postData.contents);
+     const hoja = SpreadsheetApp.openById(ID_HOJA).getSheetByName(NOMBRE_HOJA);
+     
+     hoja.appendRow([
+       datos.fecha,
+       datos.cliente,
+       datos.carga,
+       datos.descarga,
+       datos.producto,
+       datos.pesada,
+       Number(datos.bruto),
+       Number(datos.tara),
+       Number(datos.neto),
+       datos.matricula,
+       datos.km,
+       datos.chofer,
+       datos.viatico,
+       new Date()
+     ]);
+     
+     return ContentService.createTextOutput(
+       JSON.stringify({ resultado: "ok" })
+     ).setMimeType(ContentService.MimeType.JSON);
+     
+   } catch (error) {
+     return ContentService.createTextOutput(
+       JSON.stringify({ resultado: "error", mensaje: error.toString() })
+     ).setMimeType(ContentService.MimeType.JSON);
+   }
+ }
